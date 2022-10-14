@@ -70,7 +70,6 @@ public class EnemyMove : MonoBehaviour
                     if (Vector3.Distance(nextPoint, transform.position) < 0.5f) transform.position = nextPoint;
                 }
             }
-
             // playerに向かって移動
             navMeshAgent.SetDestination(player.transform.position);
             navMeshAgent.nextPosition = transform.position;
@@ -109,8 +108,8 @@ public class EnemyMove : MonoBehaviour
 
     //攻撃モーションが終了したらstateをwalkに移行
     private void EnemyMoveResume()
-{
-    state = EnemyState.Walk;
-}
+    {
+        state = EnemyState.Walk;
+    }
 
 }

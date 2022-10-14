@@ -52,6 +52,12 @@ public class EnemySpowner : MonoBehaviour
         var randomValue = Random.Range(0, enemys.Length);
         //　敵の向きをランダムに決定
         var randomRotationY = Random.value * 360f;
+        //   //敵の出現位置をランダムに設定
+        //   var enemyPos = this.transform.position;
+        //   float x = Random.Range(-10.0f, 10.0f) + enemyPos.x;
+        //   float y = Random.Range(-10.0f, 10.0f) + enemyPos.y;
+        //   Vector3 pos = new Vector3(x, y, 0);
+
 
         GameObject.Instantiate(enemys[randomValue], transform.position, Quaternion.Euler(0f, randomRotationY, 0f));
 
@@ -59,3 +65,4 @@ public class EnemySpowner : MonoBehaviour
         elapsedTime = 0f;
     }
 }
+
