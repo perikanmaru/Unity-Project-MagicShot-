@@ -111,5 +111,4 @@ public class EnemyMove : MonoBehaviour
     {
         state = EnemyState.Walk;
     }
-
 }

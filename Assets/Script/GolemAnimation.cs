@@ -8,6 +8,12 @@ public class GolemAnimation : MonoBehaviour
     Animator animator;  //オブジェクトのアニメーター
     private GameObject Golem;
 
+    //EnemyMoveScript
+    private EnemyMove EnemyMoveScript;
+    [SerializeField]
+    [Tooltip("Golemの攻撃判定用コライダーです。")]
+    private SphereCollider SphereCollider;
+
     //ゴーレムの残りHP
     private float HP;
     //最大HP
@@ -46,7 +52,8 @@ public class GolemAnimation : MonoBehaviour
 
         EnemySpowner = GameObject.Find("EnemySpowner/Enemy");
         enemySpowner = EnemySpowner.GetComponent<EnemySpowner>();
-
+        //当たり判定用コライダーをFalseにしておく
+        SphereCollider.enabled = false;
     }
 
     // Update is called once per frame
@@ -65,6 +72,9 @@ public class GolemAnimation : MonoBehaviour
 
             //colliderを無効化して死んだらすり抜けるようにする 
             collider.enabled = false;
+            //Attack判定用コライダーをfalseにする。
+            SphereCollider.enabled = false;
+
             animator.Play("Die");
 
             //AllDestroyを実行するので敵の出現を停止する
@@ -83,8 +93,6 @@ public class GolemAnimation : MonoBehaviour
 
             DieObject();
             Die = true;
-
-            //敵の撃破数をカウントする
             
         }
     }
@@ -99,6 +107,7 @@ public class GolemAnimation : MonoBehaviour
     {
         //colliderを無効化して死んだらすり抜けるようにする 
         collider.enabled = false;
+        //
         animator.Play("Die"); 
 
     }
@@ -109,6 +118,13 @@ public class GolemAnimation : MonoBehaviour
         animator.SetBool("Attack", true);
         animator.SetBool("Idle", false);
 
+        SphereCollider.enabled = true;
+
+    }
+    //Attackの終了 Golemアニメーションから呼ぶ
+    public void AttackEnd()
+    {
+        SphereCollider.enabled = false;
     }
 
     public void Walk()
