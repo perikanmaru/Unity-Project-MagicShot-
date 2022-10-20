@@ -50,29 +50,36 @@ public class EnemyMove : MonoBehaviour
             ElapsedTime = 0;
             GolemAnimation.Walk();
 
-            // 次に目指すべき位置を取得
-            var nextPoint = navMeshAgent.steeringTarget;
-            Vector3 targetDir = nextPoint - transform.position;
-
-            //回転量がゼロではないとき回転する
-            if (targetDir != Vector3.zero)
+            //hierarchy上でPlayerが見つかる時
+            if (GameObject.FindGameObjectWithTag("Player") != null)
             {
-                // その方向に向けて旋回する(120度/秒)
-                Quaternion targetRotation = Quaternion.LookRotation(targetDir);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 120f * Time.deltaTime);
+                // 次に目指すべき位置を取得
+                var nextPoint = navMeshAgent.steeringTarget;
+                Vector3 targetDir = nextPoint - transform.position;
 
-                // 自分の向きと次の位置の角度差が30度以上の場合、その場で旋回
-                float angle = Vector3.Angle(targetDir, transform.forward);
-                if (angle < 30f)
+                //回転量がゼロではないとき回転する
+                if (targetDir != Vector3.zero)
                 {
-                    transform.position += transform.forward * 5.0f * Time.deltaTime;
-                    // もしもの場合の補正
-                    if (Vector3.Distance(nextPoint, transform.position) < 0.5f) transform.position = nextPoint;
+                    // その方向に向けて旋回する(120度/秒)
+                    Quaternion targetRotation = Quaternion.LookRotation(targetDir);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 120f * Time.deltaTime);
+
+                    // 自分の向きと次の位置の角度差が30度以上の場合、その場で旋回
+                    float angle = Vector3.Angle(targetDir, transform.forward);
+                    if (angle < 30f)
+                    {
+                        transform.position += transform.forward * 5.0f * Time.deltaTime;
+                        // もしもの場合の補正
+                        if (Vector3.Distance(nextPoint, transform.position) < 0.5f) transform.position = nextPoint;
+                    }
                 }
+
+                // playerに向かって移動
+                navMeshAgent.SetDestination(player.transform.position);
+                navMeshAgent.nextPosition = transform.position;
             }
-            // playerに向かって移動
-            navMeshAgent.SetDestination(player.transform.position);
-            navMeshAgent.nextPosition = transform.position;
+
+
         }
 
         //プレイヤーと敵の距離
