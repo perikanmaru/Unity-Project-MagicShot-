@@ -17,6 +17,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public enum WeaponType
 {
@@ -206,8 +207,11 @@ public class Weapon : MonoBehaviour
 	public AudioClip dryFireSound;						// Sound to play when the user tries to fire but is out of ammo
 
 	// Other
-	private bool canFire = true;						// Whether or not the weapon can currently fire (used for semi-auto weapons)
+	private bool canFire = true;                        // Whether or not the weapon can currently fire (used for semi-auto weapons)
 
+	
+	[Tooltip("残弾数を表示するテキストです")]
+	public TextMeshProUGUI AmmoCountTxt;
 
 	// Use this for initialization
 	void Start()
@@ -276,6 +280,8 @@ public class Weapon : MonoBehaviour
 			else
 				Debug.LogWarning("Default Bullet Hole Pool does not have a BulletHolePool component.  Please assign GameObjects in the inspector that have the BulletHolePool component.");
 		}
+		//残弾数表示の初期化
+		AmmoCountTxt.text = ammoCapacity.ToString();
 	}
 	
 	// Update is called once per frame
@@ -315,6 +321,8 @@ public class Weapon : MonoBehaviour
 				StopBeam();
 			beaming = false;	// The beaming variable is set to true every frame that the Beam() method is called
 		}
+		//残弾数の表示
+		AmmoCountTxt.text = currentAmmo.ToString();
 	}
 
 	// Checks for user input to use the weapons - only if this weapon is player-controlled
