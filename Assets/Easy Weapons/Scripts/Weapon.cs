@@ -628,7 +628,7 @@ public class Weapon : MonoBehaviour
                     HealthSystemForDummies healthSystem = hit.collider.gameObject.GetComponent<HealthSystemForDummies>();
 
                     // 攻撃が当たったエネミーのゲージをダメージの量だけ減らす。
-                    healthSystem.AddToCurrentHealth(-damage);
+                   // healthSystem.AddToCurrentHealth(-damage);
 
                     // Damage
                     hit.collider.gameObject.SendMessageUpwards("ChangeHealth", -damage, SendMessageOptions.DontRequireReceiver);

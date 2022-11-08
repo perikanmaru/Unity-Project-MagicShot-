@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class HealthSystemForDummies : MonoBehaviour
 {
@@ -24,6 +23,12 @@ public class HealthSystemForDummies : MonoBehaviour
 
     public GameObject HealthBarPrefabToSpawn;
 
+    //HP参照用変数
+    private float HPAmount;
+    private Health Health;
+    private float HealthAmount;
+    private float HealtAmountofNegative;
+
     public void AddToMaximumHealth(float value)
     {
         float cachedMaximumHealth = MaximumHealth;
@@ -34,6 +39,38 @@ public class HealthSystemForDummies : MonoBehaviour
     public void Start()
     {
         IsAlive = true;
+        Health = this.gameObject.GetComponent<Health>();
+        //残りHP参照用変数の初期化
+        HPAmount = 0;
+        HealthAmount = 0;
+        HealtAmountofNegative = 0;
+    }
+    public void Update()
+    {
+
+        //残りHPの取得
+        if ((HPAmount == 0 && CurrentHealth == 0) == false && IsAlive == true)
+        {
+            HPAmount = Health.GetHPAmount();
+            HealthAmount = CurrentHealth;
+        }
+
+        if (HPAmount >= 0 && (HPAmount < HealthAmount) && IsAlive == true)
+        {
+            //実際のHPとHPバーとのずれを補正する
+            AddToCurrentHealth(-(HealthAmount - HPAmount));
+            CurrentHealth = HPAmount;
+        }
+
+
+        if (CurrentHealth < 0 && IsAlive == true)
+        {
+            HealtAmountofNegative = CurrentHealth;
+            AddToCurrentHealth(-HealtAmountofNegative);
+            CurrentHealth = 0;
+            HPAmount = 0;
+            IsAlive = false;
+        }
     }
     public void AddToCurrentHealth(float value)
     {
@@ -50,7 +87,7 @@ public class HealthSystemForDummies : MonoBehaviour
             GotHitFor(damage: value);
         }
 
-       OnCurrentHealthChanged.Invoke(new CurrentHealth(cachedCurrentHealth, CurrentHealth, CurrentHealthPercentage));
+        OnCurrentHealthChanged.Invoke(new CurrentHealth(cachedCurrentHealth, CurrentHealth, CurrentHealthPercentage));
     }
 
     void GotHealedFor(float value)

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GolemAnimation : MonoBehaviour
@@ -19,7 +17,7 @@ public class GolemAnimation : MonoBehaviour
     //最大HP
     private float MaxHP;
     //のこりHP
-   private float HPAmount;
+    private float HPAmount;
     Collider collider;
     //死んだかの判定用変数
     private bool Die = false;
@@ -30,7 +28,7 @@ public class GolemAnimation : MonoBehaviour
     //倒すべき敵の数
     [Tooltip("倒すべき敵の数です。 出現させる敵より大きくしないこと！")]
     [SerializeField]
-    public int MaxEnemy ;
+    public int MaxEnemy;
     //エネミーマネージャー格納用変数
     private GameObject EnemyManeger;
     private EnemyManeger enemyManeger;
@@ -44,11 +42,11 @@ public class GolemAnimation : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         collider = GetComponent<Collider>();
-       // Golem = GameObject.Find("Golem"); //Playerっていうオブジェクトを探す
+        // Golem = GameObject.Find("Golem"); //Playerっていうオブジェクトを探す
         MaxHP = GetComponent<Health>().MaxHP(); //付いているスクリプトを取得 最大HPの所得
         //EnemyManegerの取得
         EnemyManeger = GameObject.Find("EnemyManeger");
-        enemyManeger =EnemyManeger.GetComponent<EnemyManeger>();
+        enemyManeger = EnemyManeger.GetComponent<EnemyManeger>();
 
         EnemySpowner = GameObject.Find("EnemySpowner/Enemy");
         enemySpowner = EnemySpowner.GetComponent<EnemySpowner>();
@@ -66,7 +64,7 @@ public class GolemAnimation : MonoBehaviour
         EnemyDestroyNum = enemyManeger.EnemyDestroyNumber();
 
         //敵の撃破数が所定の数に達したか？
-        if( AllDestroyActive == false&&EnemyDestroyNum >= MaxEnemy)
+        if (AllDestroyActive == false && EnemyDestroyNum >= MaxEnemy)
         {
             AllDestroyActive = true;
 
@@ -86,14 +84,13 @@ public class GolemAnimation : MonoBehaviour
         //HPは残っているか？
         HPAmount = CanDie();
 
-        if (HPAmount <= 0 && Die ==false )
+        if (HPAmount <= 0 && Die == false)
         {
             //倒した敵をカウント
             enemyManeger.EnemyDestroySum();
-
             DieObject();
             Die = true;
-            
+
         }
     }
     //残りHPの計算
@@ -108,13 +105,13 @@ public class GolemAnimation : MonoBehaviour
         //colliderを無効化して死んだらすり抜けるようにする 
         collider.enabled = false;
         //
-        animator.Play("Die"); 
+        animator.Play("Die");
 
     }
     //Attackの再生
     public void StartAttack()
     {
-        animator.SetBool("Walk",false);
+        animator.SetBool("Walk", false);
         animator.SetBool("Attack", true);
         animator.SetBool("Idle", false);
 

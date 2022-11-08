@@ -48,6 +48,11 @@ public class Health : MonoBehaviour
         // Make sure that the health never exceeds the maximum health
         else if (currentHealth > maxHealth)
             currentHealth = maxHealth;
+
+        if(currentHealth < 0)
+        {
+            currentHealth = 0;
+        }
     }
 
     public void Die()

@@ -44,7 +44,7 @@ public class Explosion : MonoBehaviour
 
                    float ceiledToIntValueToFloat = Mathf.CeilToInt(damageAmount);
                     // Damageの分だけゲージを減らす
-                     healthSystem.AddToCurrentHealth(-ceiledToIntValueToFloat);
+                  //   healthSystem.AddToCurrentHealth(-ceiledToIntValueToFloat);
                 }
 
                 // The Easy Weapons health system
