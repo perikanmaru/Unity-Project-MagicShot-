@@ -7,20 +7,33 @@
 
 using UnityEngine;
 using System.Collections;
+using TMPro;
+using System;
+using UnityEngine.UI;
 
 public class WeaponSystem : MonoBehaviour
 {
 	public GameObject[] weapons;				// The array that holds all the weapons that the player has
 	public int startingWeaponIndex = 0;			// The weapon index that the player will start with
-	private int weaponIndex;					// The current index of the active weapon
+	private int weaponIndex;                    // The current index of the active weapon
 
+	//プレイヤーが装備する武器の名前の配列
+	public string[] WeponNameIndex;
+	//プレイヤーが装備する武器の名前
+	public TextMeshProUGUI WeponName;
 
+	public Sprite[] WeponSprite;
+
+	public Image WeponImage;
 	// Use this for initialization
 	void Start()
 	{
 		// Make sure the starting active weapon is the one selected by the user in startingWeaponIndex
 		weaponIndex = startingWeaponIndex;
 		SetActiveWeapon(weaponIndex);
+		//最初の武器の名前の表示
+		WeponName.text = WeponNameIndex[weaponIndex];
+		WeponImage.sprite = WeponSprite[weaponIndex];
 	}
 	
 	// Update is called once per frame
@@ -85,6 +98,11 @@ public class WeaponSystem : MonoBehaviour
 
 		// Activate the one weapon that we want
 		weapons[index].SetActive(true);
+		//武器の名前を次の武器に替える
+		WeponName.text = WeponNameIndex[index];
+		//画像を次の武器に替える
+		WeponImage.sprite = WeponSprite[index];
+		WeponImage.SetNativeSize();
 	}
 
 	public void NextWeapon()
