@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemySpowner : MonoBehaviour
@@ -8,6 +9,7 @@ public class EnemySpowner : MonoBehaviour
     [SerializeField] float appearNextTime;
     [Tooltip("この場所から出現する敵の数")]
     [SerializeField] int maxNumOfEnemys;
+
     //　今何人の敵を出現させたか（総数）
     private int numberOfEnemys;
     //　待ち時間計測フィールド
@@ -23,9 +25,10 @@ public class EnemySpowner : MonoBehaviour
         numberOfEnemys = 0;
         elapsedTime = 0f;
     }
-
+  
     void Update()
     {
+       
 
         //　この場所から出現する最大数を超えてたら何もしない  またはAllDestroyが実行されたら何もしない(スポーンの停止)
         if (numberOfEnemys >= maxNumOfEnemys || AlldestroyActive == true)
@@ -33,10 +36,11 @@ public class EnemySpowner : MonoBehaviour
             return;
         }
 
+
         //　経過時間を足す
         elapsedTime += Time.deltaTime;
 
-        //　経過時間が経ったら
+         //　経過時間が経ったら
         if (elapsedTime > appearNextTime)
         {
             elapsedTime = 0f;
