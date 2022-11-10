@@ -11,7 +11,8 @@ public class GameManeger : MonoBehaviour
     public float GameTime;
     private float ExecutionTime = 0.0f;
     public int Score = 0;
-
+    //ゲーム時間計測開始用変数
+    private bool StartTimeCount;
     //シーン遷移のメソッドが呼ばれたか判定用変数
     private bool NextSceane;
     //経過時間表示用変数
@@ -34,6 +35,14 @@ public class GameManeger : MonoBehaviour
 
     [SerializeField]
     GameObject EnemySpowner;
+
+    [SerializeField]
+    GameObject PlayerUI;
+
+    [SerializeField]
+    GameObject GameUI;
+    //ゲームスコアを result画面で参照用変数
+   public static int ResultScore;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,7 +59,14 @@ public class GameManeger : MonoBehaviour
         StartCamera.SetActive(true);
         player.SetActive(false);
         EnemySpowner.SetActive(false);
+        PlayerUI.SetActive(false);
+        GameUI.SetActive(false);
 
+        //ゲーム時間計測開始用変数の初期化
+        StartTimeCount = false;
+
+        //リザルトスコアの初期化
+        ResultScore = 0;
     }
 
     private IEnumerator StartGame()
@@ -58,11 +74,18 @@ public class GameManeger : MonoBehaviour
 
         yield return new WaitForSeconds(2); // 引数の秒数だけ待つ
 
+        //アクティブと非アクティブを入れ替える
         player.SetActive(true);
         StartCamera.SetActive(false);
 
         //EnemyManagerをアクティブにする。
         EnemySpowner.SetActive(true);
+
+        //UIを表示するようにする
+        PlayerUI.SetActive(true);
+        GameUI.SetActive(true);
+        //ゲーム時間計測を開始する
+        StartTimeCount = true; 
         yield break;
     }
     // Update is called once per frame
@@ -75,22 +98,26 @@ public class GameManeger : MonoBehaviour
         }
 
         //ExecutionTimeがGameTimeになるまでExecutionTimeを更新する
-        if (ExecutionTime <= GameTime)
+        if ((ExecutionTime <= GameTime) && StartTimeCount == true)
         {
             //経過時間の更新
             ExecutionTime += Time.deltaTime;
         }
+
         //ゲーム終了時間になった時シーンを遷移する
         if(ExecutionTime >= GameTime && (NextSceane == false))
         {
             NextSceane = true;
+            //リザルト画面用変数に最終的なスコアを代入する。
+            ResultScore = Score;
             //エンドシーンをロードする
             SceneManager.LoadScene("Endsceane");
         }
-        ceiledToIntValueToFloat = Mathf.CeilToInt(ExecutionTime);
+        //時間の小数点表示をなくす
+       ceiledToIntValueToFloat = Mathf.CeilToInt(ExecutionTime);
 
-        //経過時間の表示
-        GameTimetxt.text = "経過時間　: " + ceiledToIntValueToFloat;
+        //経過時間の表示 小数点繰り上げで表示されてしまうため-1をする
+        GameTimetxt.text = "経過時間　: " + (ceiledToIntValueToFloat - 1);
         //獲得スコアの表示
         GameScoretxt.text = "Score　: " + Score;
     }
@@ -110,5 +137,10 @@ public class GameManeger : MonoBehaviour
     {
         Score = Score + score;
         Debug.Log(Score);
+    }
+    //ResultScoreをエンドシーンに返すメソッド
+   public static int GetResultScore()
+    {
+        return ResultScore;
     }
 }

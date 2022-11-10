@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SceanManager_start : MonoBehaviour
+public class SceanManager_Start : MonoBehaviour
 {
     //ƒL[‚ª‰Ÿ‚³‚ê‚½‚©‚Ì”»’è—p•Ï”
     private bool GetKey;
