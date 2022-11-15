@@ -48,7 +48,7 @@ public class GolemAnimation : MonoBehaviour
         EnemyManeger = GameObject.Find("EnemyManeger");
         enemyManeger = EnemyManeger.GetComponent<EnemyManeger>();
 
-        EnemySpowner = GameObject.Find("EnemySpowner/Enemy");
+        EnemySpowner = GameObject.Find("EnemySpowner/SponeEnemy1");
         enemySpowner = EnemySpowner.GetComponent<EnemySpowner>();
         //当たり判定用コライダーをFalseにしておく
         SphereCollider.enabled = false;
@@ -66,17 +66,17 @@ public class GolemAnimation : MonoBehaviour
         //敵の撃破数が所定の数に達したか？
         if (AllDestroyActive == false && EnemyDestroyNum >= MaxEnemy)
         {
-            AllDestroyActive = true;
-
             //colliderを無効化して死んだらすり抜けるようにする 
             collider.enabled = false;
             //Attack判定用コライダーをfalseにする。
             SphereCollider.enabled = false;
 
+            AllDestroyActive = true;
             animator.Play("Die");
 
             //AllDestroyを実行するので敵の出現を停止する
-            enemySpowner.AlldestroyActive = true;
+           // enemySpowner.AlldestroyActive = true;
+
             //シーン上にに存在する敵をすべて破壊する
             GetComponent<DestroyObject>().AllDestroy();
         }

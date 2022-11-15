@@ -1,8 +1,8 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections;
 
 public class GameManeger : MonoBehaviour
 {
@@ -20,8 +20,8 @@ public class GameManeger : MonoBehaviour
     TextMeshProUGUI GameTimetxt;
     //経過時間表示用変数
     float ceiledToIntValueToFloat;
-   //ゲームスコア表示用変数
-   [SerializeField]
+    //ゲームスコア表示用変数
+    [SerializeField]
     TextMeshProUGUI GameScoretxt;
 
     [SerializeField]
@@ -30,8 +30,8 @@ public class GameManeger : MonoBehaviour
     GameObject player;
     private bool Colutine;
 
-    [Tooltip("敵が最初に出現するまでの時間です")]
-    [SerializeField] float WaitSporneTime;
+    [Tooltip("最初の画面が出現する時間です")]
+    [SerializeField] float WaitTime;
 
     [SerializeField]
     GameObject EnemySpowner;
@@ -41,8 +41,32 @@ public class GameManeger : MonoBehaviour
 
     [SerializeField]
     GameObject GameUI;
+    //最初の画面に表示するロゴです。
+    [SerializeField]
+    GameObject StandbyLogo;
+    [SerializeField]
+    GameObject ReadyLogo;
+    [SerializeField]
+    GameObject GoLogo;
+    //EnemyManeger格納用変数
+    [SerializeField]
+    GameObject SponeEnemy1;
+    EnemySpowner spowner1;
+    [SerializeField]
+    GameObject SponeEnemy2;
+    EnemySpowner spowner2;
+    [SerializeField]
+    GameObject SponeEnemy3;
+    EnemySpowner spowner3;
+    //最初に表示するロゴのゲージ
+    [SerializeField]
+    Image Left_Gauge;
+    [SerializeField]
+    Image Right_Gauge;
+
+    private bool StartgaugeActive;
     //ゲームスコアを result画面で参照用変数
-   public static int ResultScore;
+    public static int ResultScore;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,11 +80,26 @@ public class GameManeger : MonoBehaviour
 
         Colutine = false;
         //アクティブにするオブジェクトの初期設定化
+        //カメラ関連
         StartCamera.SetActive(true);
         player.SetActive(false);
+        //エネミースポーン関連
         EnemySpowner.SetActive(false);
+        //UI関連
         PlayerUI.SetActive(false);
         GameUI.SetActive(false);
+        //最初の画面関連
+        StandbyLogo.SetActive(false);
+        ReadyLogo.SetActive(false);
+        GoLogo.SetActive(false);
+        //画像の非表示
+        Left_Gauge.enabled = false;
+        Right_Gauge.enabled = false;
+        StartgaugeActive = false;
+        //Enemypownerの取得
+        spowner1 = SponeEnemy1.GetComponent<EnemySpowner>();
+        spowner2 = SponeEnemy1.GetComponent<EnemySpowner>();
+        spowner3 = SponeEnemy1.GetComponent<EnemySpowner>();
 
         //ゲーム時間計測開始用変数の初期化
         StartTimeCount = false;
@@ -71,9 +110,28 @@ public class GameManeger : MonoBehaviour
 
     private IEnumerator StartGame()
     {
+        //最初のロゴの表示
+        StandbyLogo.SetActive(true);
+        ReadyLogo.SetActive(true);
 
-        yield return new WaitForSeconds(2); // 引数の秒数だけ待つ
+        //画像の表示
+        Left_Gauge.enabled = true;
+        Right_Gauge.enabled = true;
+        StartgaugeActive = true;
 
+        yield return new WaitForSeconds(1.5f); // 引数の秒数だけ待つ
+        //表示するロゴを入れ替える
+        StandbyLogo.SetActive(false);
+        ReadyLogo.SetActive(false);
+        GoLogo.SetActive(true);
+
+        //画像の非表示
+        Left_Gauge.enabled = false;
+        Right_Gauge.enabled = false;
+        StartgaugeActive = false;
+        yield return new WaitForSeconds(0.5f);　//1秒待つ
+
+        GoLogo.SetActive(false);
         //アクティブと非アクティブを入れ替える
         player.SetActive(true);
         StartCamera.SetActive(false);
@@ -85,8 +143,20 @@ public class GameManeger : MonoBehaviour
         PlayerUI.SetActive(true);
         GameUI.SetActive(true);
         //ゲーム時間計測を開始する
-        StartTimeCount = true; 
+        StartTimeCount = true;
         yield break;
+    }
+
+    private void EndGame()
+    {
+
+        //UIを非表示するようにする
+        PlayerUI.SetActive(false);
+        GameUI.SetActive(false);
+        //AllDestroyを実行するので敵の出現を停止する
+        spowner1.AlldestroyActive = true;
+        spowner2.AlldestroyActive = true;
+        spowner3.AlldestroyActive = true;
     }
     // Update is called once per frame
     void Update()
@@ -95,6 +165,11 @@ public class GameManeger : MonoBehaviour
         {
             Colutine = true;
             StartCoroutine("StartGame");
+        }
+        if (StartgaugeActive == true)
+        {
+            Left_Gauge.fillAmount -= (0.666f * Time.deltaTime);
+            Right_Gauge.fillAmount -= (0.666f * Time.deltaTime);
         }
 
         //ExecutionTimeがGameTimeになるまでExecutionTimeを更新する
@@ -105,16 +180,17 @@ public class GameManeger : MonoBehaviour
         }
 
         //ゲーム終了時間になった時シーンを遷移する
-        if(ExecutionTime >= GameTime && (NextSceane == false))
+        if (ExecutionTime >= GameTime && (NextSceane == false))
         {
             NextSceane = true;
             //リザルト画面用変数に最終的なスコアを代入する。
             ResultScore = Score;
-            //エンドシーンをロードする
-            SceneManager.LoadScene("Endsceane");
+            EndGame();
+            //1秒後にEndSeaneに移動する
+            Invoke("GoToEndSeane", 1.0f);
         }
         //時間の小数点表示をなくす
-       ceiledToIntValueToFloat = Mathf.CeilToInt(ExecutionTime);
+        ceiledToIntValueToFloat = Mathf.CeilToInt(ExecutionTime);
 
         //経過時間の表示 小数点繰り上げで表示されてしまうため-1をする
         GameTimetxt.text = "経過時間　: " + (ceiledToIntValueToFloat - 1);
@@ -122,6 +198,11 @@ public class GameManeger : MonoBehaviour
         GameScoretxt.text = "Score　: " + Score;
     }
 
+    private void GoToEndSeane()
+    {
+        //エンドシーンをロードする
+        SceneManager.LoadScene("Endsceane");
+    }
     //ゲームの経過時間を返すメソッド
     public float ReturnGameTime()
     {
@@ -139,7 +220,7 @@ public class GameManeger : MonoBehaviour
         Debug.Log(Score);
     }
     //ResultScoreをエンドシーンに返すメソッド
-   public static int GetResultScore()
+    public static int GetResultScore()
     {
         return ResultScore;
     }

@@ -27,7 +27,7 @@ public class DestroyObject : MonoBehaviour
         {
             targets = GameObject.FindGameObjectsWithTag("Enemy");
 
-            //すべてのオブジェクトを破壊をtrueにする
+            //すべてのオブジェクトの破壊をtrueにする
             AllDestroyActive = true;
 
             foreach (GameObject i in targets)
