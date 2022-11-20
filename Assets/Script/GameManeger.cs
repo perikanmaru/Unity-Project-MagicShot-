@@ -41,6 +41,9 @@ public class GameManeger : MonoBehaviour
 
     [SerializeField]
     GameObject GameUI;
+
+    [SerializeField]
+    GameObject TimeUpUI;
     //最初の画面に表示するロゴです。
     [SerializeField]
     GameObject StandbyLogo;
@@ -63,7 +66,14 @@ public class GameManeger : MonoBehaviour
     Image Left_Gauge;
     [SerializeField]
     Image Right_Gauge;
-
+    //PlayerのHP監視用変数
+    [SerializeField]
+    GameObject Player;
+    Health Playerhealth;
+   private float PlayerHP;
+    private bool PlayerIsCanDie;
+    //まだゲームの残り時間が残ってるか判定用変数　Result画面にいくときにPlayerが倒されてGameOversceneに遷移しないようにするため
+    private bool Gaming;
     private bool StartgaugeActive;
     //ゲームスコアを result画面で参照用変数
     public static int ResultScore;
@@ -88,6 +98,7 @@ public class GameManeger : MonoBehaviour
         //UI関連
         PlayerUI.SetActive(false);
         GameUI.SetActive(false);
+        TimeUpUI.SetActive(false);
         //最初の画面関連
         StandbyLogo.SetActive(false);
         ReadyLogo.SetActive(false);
@@ -106,6 +117,12 @@ public class GameManeger : MonoBehaviour
 
         //リザルトスコアの初期化
         ResultScore = 0;
+
+        //PlayerのHPの取得と初期化
+        Playerhealth = Player.GetComponent<Health>();
+        PlayerHP = Playerhealth.MaxHP();
+        PlayerIsCanDie = false;
+        Gaming = true;
     }
 
     private IEnumerator StartGame()
@@ -144,6 +161,8 @@ public class GameManeger : MonoBehaviour
         GameUI.SetActive(true);
         //ゲーム時間計測を開始する
         StartTimeCount = true;
+        //Playerが倒されるようになる
+        PlayerIsCanDie = true;
         yield break;
     }
 
@@ -153,6 +172,8 @@ public class GameManeger : MonoBehaviour
         //UIを非表示するようにする
         PlayerUI.SetActive(false);
         GameUI.SetActive(false);
+        //UIを表示するようにする
+        TimeUpUI.SetActive(true);
         //AllDestroyを実行するので敵の出現を停止する
         spowner1.AlldestroyActive = true;
         spowner2.AlldestroyActive = true;
@@ -182,12 +203,21 @@ public class GameManeger : MonoBehaviour
         //ゲーム終了時間になった時シーンを遷移する
         if (ExecutionTime >= GameTime && (NextSceane == false))
         {
+            Gaming = false;
             NextSceane = true;
             //リザルト画面用変数に最終的なスコアを代入する。
             ResultScore = Score;
             EndGame();
-            //1秒後にEndSeaneに移動する
-            Invoke("GoToEndSeane", 1.0f);
+            //5秒後にEndSeaneに移動する
+            Invoke("GoToEndSeane", 5.0f);
+        }
+        //playerの残りHPの取得
+        PlayerHP = Playerhealth.GetHPAmount();
+
+        if( (PlayerHP <= 0 ) == true && (PlayerIsCanDie == true) && (Gaming == true))
+        {
+            //GameOverシーンの呼び出し
+            GameOver();
         }
         //時間の小数点表示をなくす
         ceiledToIntValueToFloat = Mathf.CeilToInt(ExecutionTime);
@@ -223,5 +253,11 @@ public class GameManeger : MonoBehaviour
     public static int GetResultScore()
     {
         return ResultScore;
+    }
+
+    public void GameOver()
+    {
+        //エンドシーンをロードする
+        SceneManager.LoadScene("GameOver");
     }
 }

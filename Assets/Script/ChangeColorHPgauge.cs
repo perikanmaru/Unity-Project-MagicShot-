@@ -11,6 +11,7 @@ public class ChangeColorHPgauge : MonoBehaviour
     private Image image_HPgauge;
     private float hp_ratio;
     //プレイヤーのHP
+    [SerializeField]
     private GameObject PlayerHP;
     // Start is called before the first frame update
     void Start()
@@ -18,7 +19,7 @@ public class ChangeColorHPgauge : MonoBehaviour
         image_HPgauge = gameObject.GetComponent<Image>();
         color_s = 1.0f;
         color_v = 1.0f;
-        PlayerHP = GameObject.Find("Player"); //Playerっていうオブジェクトを探す
+     //   PlayerHP = GameObject.Find("Player"); //Playerっていうオブジェクトを探す
        
     }
 

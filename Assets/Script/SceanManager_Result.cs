@@ -18,7 +18,11 @@ public class SceanManager_Result : MonoBehaviour
     //シーン遷移のメソッドが呼ばれたか判定用変数
     private bool NextSceane;
 
-
+    [SerializeField]
+    [Tooltip("Resultに移動したとき最初操作を受け付けない時間")]
+    private float ResultTime;
+    private float TempTime;
+    private bool Result;
     private void Start()
     {
         //ResultScoreの初期化
@@ -38,11 +42,17 @@ public class SceanManager_Result : MonoBehaviour
             GetScore = true;
             ResultScore = Score();
         }
-        //スコアの表示
-        ScoreTxt.text = "Score　: "  + ResultScore.ToString();
 
-        //キーボードのキーが押されたとき
-        if (Input.GetMouseButton(0) || Input.GetMouseButton(1) || Input.GetMouseButton(2) == true)
+        TempTime += Time.deltaTime;
+        if (TempTime >= ResultTime)
+        {
+            Result = true;
+        }
+        //スコアの表示
+        ScoreTxt.text = ResultScore.ToString();
+
+        //mouseが押されたとき
+        if ((Input.GetMouseButton(0) || Input.GetMouseButton(1) || Input.GetMouseButton(2) == true) && (Result == true))
         {
             //シーン遷移をtureにする
             GetKey = true;
