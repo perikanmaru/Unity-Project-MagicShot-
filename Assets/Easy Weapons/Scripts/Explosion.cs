@@ -38,7 +38,7 @@ public class Explosion : MonoBehaviour
             {
                 float damageAmount = damage * (1 / Vector3.Distance(transform.position, col.transform.position));
                 //floatをintに変換
-                if (col.gameObject.tag == ("Enemy"))
+                if (col.gameObject.tag == ("Player"))
                 {
                     HealthSystemForDummies healthSystem = col.gameObject.GetComponent<HealthSystemForDummies>();
 
