@@ -7,8 +7,15 @@ Unityプロジェクトの管理用リポジトリです
 
 コードを読みたい場合は「Aseets/Script」フォルダーを参照すると
 スクリプトが格納されています。
+
 またこのゲームはUnityRoomで公開しております。
 もし遊びたいと思った場合は下記URLより飛んでいただき遊んでみてください。
 URL: https://unityroom.com/games/magicshot
-![image](https://user-images.githubusercontent.com/99862880/205417181-4581710e-d1e7-4c60-a969-fd744ce95f63.png)
-もし実機で動かしたい場合
+
+もし実機で動かしたい場合ゲーム会社関係者様限定でGitCloneしていただいて
+も構いません。
+Unity ver 2021.3f
+Windows11
+で開発を行っていました。
+もし実機で動かす場合はSeane名がStartSeaneで実行させるとUnityRoomで
+動かしたときと同じ挙動になるかと思います。
