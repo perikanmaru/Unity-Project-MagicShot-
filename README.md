@@ -19,3 +19,6 @@ Windows11
 で開発を行っていました。
 もし実機で動かす場合はSeane名が「StartSeane」で実行させるとUnityRoomで
 動かしたときと同じ挙動になるかと思います。
+
+ゲーム以外のプログラムのリポジトリはこちらから！！
+URL :　https://github.com/perikanmaru/portfolio
